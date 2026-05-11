@@ -3,27 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// 1. INI WAJIB: Biar Controller lu kenal sama kurir (Model) Booking
+use App\Models\Booking; 
 
 class BookingController extends Controller
 {
-    // Fungsi untuk BIKIN pesanan (POST)
     public function store(Request $request)
     {
-        // Ibaratnya ini berhasil nyimpen data ke database
+        // 2. Perintah ini yang beneran nyimpen ke database
+        $simpan = Booking::create([
+            'user_name' => $request->user_name,
+            'hotel_id'  => $request->hotel_id,
+            'durasi'    => $request->durasi,
+        ]);
+
         return response()->json([
             'status' => 'sukses',
-            'pesan' => 'Mantap, pesanan hotel berhasil dibuat!',
-            'data_yang_dikirim' => $request->all()
+            'pesan' => 'Data SEKARANG beneran masuk ke phpMyAdmin!',
+            'data_di_database' => $simpan
         ], 201);
     }
 
-    // Fungsi untuk BATALIN pesanan (DELETE)
     public function destroy($id)
     {
-        // Ibaratnya ini berhasil ngehapus data di database berdasarkan ID
+        // 3. Perintah ini yang beneran ngehapus dari database berdasarkan ID
+        $hapus = Booking::find($id);
+        
+        if($hapus) {
+            $hapus->delete();
+            return response()->json([
+                'status' => 'sukses',
+                'pesan' => 'Pesanan ID ' . $id . ' udah ilang dari database.'
+            ], 200);
+        }
+
         return response()->json([
-            'status' => 'sukses',
-            'pesan' => 'Pesanan dengan ID ' . $id . ' berhasil dibatalkan/dihapus.'
-        ], 200);
+            'status' => 'gagal',
+            'pesan' => 'Data nggak ketemu, Bim.'
+        ], 404);
     }
 }
