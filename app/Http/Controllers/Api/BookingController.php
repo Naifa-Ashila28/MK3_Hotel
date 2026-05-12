@@ -18,7 +18,7 @@ class BookingController extends Controller
 
         return response()->json([
             'status' => 'sukses',
-            'pesan' => 'Data SEKARANG beneran masuk ke phpMyAdmin!',
+            'pesan' => 'Data berhasil masuk ke database',
             'data_di_database' => $simpan
         ], 201);
     }
@@ -31,13 +31,13 @@ class BookingController extends Controller
             $hapus->delete();
             return response()->json([
                 'status' => 'sukses',
-                'pesan' => 'Pesanan ID ' . $id . ' udah ilang dari database.'
+                'pesan' => 'Pesanan ID ' . $id . ' pesanan sudah hilang dari database.'
             ], 200);
         }
 
         return response()->json([
             'status' => 'gagal',
-            'pesan' => 'Data nggak ketemu, Bim.'
+            'pesan' => 'Data tidak ada/tidak ketemu.'
         ], 404);
     }
 }
