@@ -3,11 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Import semua controller yang bakal kita pakai (nanti lu bikin satu-satu controllernya)
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HotelController;
-use App\Http\Controllers\PaymentController;
+// INI YANG DIBENERIN: Tambahin \Api di tengahnya biar sesuai sama folder
+use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HotelController;
+use App\Http\Controllers\Api\PaymentController;
 
 // 1. Membuat pemesanan hotel
 Route::post('/booking', [BookingController::class, 'store']);
