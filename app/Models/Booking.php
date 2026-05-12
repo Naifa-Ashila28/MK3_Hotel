@@ -9,10 +9,17 @@ class Booking extends Model
 {
     use HasFactory;
 
-    // Tambahin ini biar Laravel izinin kolom-kolom ini diisi lewat Postman
     protected $fillable = [
-        'user_name', 
-        'hotel_id', 
-        'durasi'
-    ];
+    'user_name', 
+    'nama_hotel', 
+    'kota', 
+    'durasi'
+];
+
+    // INI TAMBAHANNYA: Bikin relasi ke tabel hotels
+    public function hotel()
+    {
+        // Artinya: Booking ini punya data nyambung ke Model Hotel berdasarkan hotel_id
+        return $this->belongsTo(Hotel::class, 'hotel_id');
+    }
 }

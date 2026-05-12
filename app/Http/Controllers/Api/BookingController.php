@@ -8,20 +8,21 @@ use App\Models\Booking;
 
 class BookingController extends Controller
 {
-    public function store(Request $request)
-    {
-        $simpan = Booking::create([
-            'user_name' => $request->user_name,
-            'hotel_id'  => $request->hotel_id,
-            'durasi'    => $request->durasi,
-        ]);
+   public function store(Request $request)
+{
+    $simpan = Booking::create([
+        'user_name'  => $request->user_name,
+        'nama_hotel' => $request->nama_hotel,
+        'kota'       => $request->kota,
+        'durasi'     => $request->durasi,
+    ]);
 
-        return response()->json([
-            'status' => 'sukses',
-            'pesan' => 'Data berhasil masuk ke database',
-            'data_di_database' => $simpan
-        ], 201);
-    }
+    return response()->json([
+        'status' => 'sukses',
+        'pesan'  => 'Booking di cabang ' . $request->kota . ' berhasil dicatat!',
+        'data'   => $simpan
+    ], 201);
+}
 
     public function destroy($id)
     {
