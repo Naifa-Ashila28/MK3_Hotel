@@ -10,12 +10,12 @@ class BookingController extends Controller
 {
    public function store(Request $request)
 {
-    $simpan = Booking::create([
-        'user_name'  => $request->user_name,
-        'nama_hotel' => $request->nama_hotel,
-        'kota'       => $request->kota,
-        'durasi'     => $request->durasi,
-    ]);
+    // Pastikan tidak ada lagi kata 'nama_hotel' atau 'kota' di sini
+$simpan = Booking::create([
+    'user_name' => $request->user_name,
+    'hotel_id'  => $request->hotel_id, 
+    'durasi'    => $request->durasi,
+]);
 
     return response()->json([
         'status' => 'sukses',

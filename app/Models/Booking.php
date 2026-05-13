@@ -10,9 +10,8 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_name', 
-        'nama_hotel', 
-        'kota', 
-        'durasi'
-    ];
+    'user_name', 
+    'hotel_id', // Pastikan ini hotel_id, bukan nama_hotel
+    'durasi'
+];
 }
