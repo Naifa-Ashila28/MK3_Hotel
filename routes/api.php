@@ -46,3 +46,6 @@ Route::get('/review', [ReviewController::class, 'index']);
 
 // Untuk mengirim ulasan baru dari aplikasi Android
 Route::post('/review', [ReviewController::class, 'store']);
+
+// untuk register
+Route::post('/register', [AuthController::class, 'register']);
