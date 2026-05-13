@@ -49,3 +49,6 @@ Route::post('/review', [ReviewController::class, 'store']);
 
 // untuk register
 Route::post('/register', [AuthController::class, 'register']);
+
+// untuk logout
+Route::post('/logout', [AuthController::class, 'logout']);

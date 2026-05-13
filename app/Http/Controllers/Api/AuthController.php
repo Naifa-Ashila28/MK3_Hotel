@@ -27,6 +27,7 @@ class AuthController extends Controller
             ]
         ], 200);
     }
+    
     public function register(Request $request)
     {
         $request->validate([
@@ -51,5 +52,14 @@ class AuthController extends Controller
                 'token' => $token,
             ]
         ], 201);
+    }
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil logout, token telah dihapus.'
+        ], 200);
     }
 }
