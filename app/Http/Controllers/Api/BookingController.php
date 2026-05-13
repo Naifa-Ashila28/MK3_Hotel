@@ -30,7 +30,7 @@ class BookingController extends Controller
         
         if($hapus) {
             $hapus->delete();
-            return response()->json([
+            return response()->json([   
                 'status' => 'sukses',
                 'pesan' => 'Pesanan ID ' . $id . ' pesanan sudah hilang dari database.'
             ], 200);
