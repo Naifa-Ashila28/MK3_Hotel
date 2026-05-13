@@ -32,6 +32,8 @@ Route::get('/hotels/{id}', [HotelController::class, 'show']);
 // 7. Untuk Lokasi
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/location', [UserController::class, 'storeLocation']);
+    // untuk logout
+Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 // 6. Menampilkan detail hotel berdasarkan ID (Spesifik satu hotel)
@@ -50,5 +52,3 @@ Route::post('/review', [ReviewController::class, 'store']);
 // untuk register
 Route::post('/register', [AuthController::class, 'register']);
 
-// untuk logout
-Route::post('/logout', [AuthController::class, 'logout']);
