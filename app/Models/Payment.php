@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     use HasFactory;
-
-    // ... (komentar dan $table kamu biarkan saja seperti aslinya)
     protected $table = 'payments';
 
     protected $fillable = [
@@ -20,13 +18,10 @@ class Payment extends Model
         'transaction_id',
     ];
 
-    /**
-     * Memastikan tipe data yang keluar dari API sudah sesuai standar.
-     * Ini sangat membantu frontend Android (Retrofit/Kotlin) saat mapping data.
-     */
+    // Memastikan tipe data yang keluar dari API sudah sesuai standar
     protected $casts = [
         'booking_id' => 'integer',
-        'amount' => 'integer', // atau 'double' jika ada nilai desimal
+        'amount' => 'integer', 
     ];
 
     public function booking()
