@@ -18,9 +18,9 @@ $simpan = Booking::create([
 ]);
 
     return response()->json([
-        'status' => 'sukses',
-        'pesan'  => 'Booking di cabang ' . $request->kota . ' berhasil dicatat!',
-        'data'   => $simpan
+    'status' => 'sukses',
+    'pesan'  => 'Booking berhasil dicatat!', 
+    'data'   => $simpan
     ], 201);
 }
 
