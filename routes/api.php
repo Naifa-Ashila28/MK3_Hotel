@@ -29,8 +29,9 @@ Route::post('/payment', [PaymentController::class, 'pay']);
 Route::get('/hotels/{id}', [HotelController::class, 'show']);
 
 // 7. Untuk Lokasi
-Route::post('/user/location', [UserController::class, 'storeLocation']);
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/user/location', [UserController::class, 'storeLocation']);
+});
 // 6. Menampilkan detail hotel berdasarkan ID (Spesifik satu hotel)
 Route::get('/hotels/{id}', [HotelController::class, 'show']);
 

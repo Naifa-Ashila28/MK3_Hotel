@@ -9,7 +9,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Kita tambahin kolom latitude dan longitude setelah kolom password
             $table->decimal('latitude', 10, 8)->nullable()->after('password');
             $table->decimal('longitude', 11, 8)->nullable()->after('latitude');
         });
