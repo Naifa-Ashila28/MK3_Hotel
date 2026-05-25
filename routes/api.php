@@ -45,6 +45,13 @@ Route::post('/hotels', [HotelController::class, 'store']);       // Pintu buat C
 Route::put('/hotels/{id}', [HotelController::class, 'update']);   // Pintu buat Update (Method PUT)
 Route::delete('/hotels/{id}', [HotelController::class, 'destroy']); // Pintu buat Delete (Method DELETE)
 
+// --- ROUTE GROUP UNTUK CATEGORIES ---
+Route::get('/categories', [HotelController::class, 'categories']);
+Route::post('/categories', [HotelController::class, 'storeCategory']);
+Route::put('/categories/{id}', [HotelController::class, 'updateCategory']);
+Route::delete('/categories/{id}', [HotelController::class, 'destroyCategory']);
+
+
 // --- FITUR BARU: REVIEW & RATING ---
 // Untuk melihat semua ulasan yang masuk
 Route::get('/review', [ReviewController::class, 'index']); 
