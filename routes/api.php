@@ -41,6 +41,9 @@ Route::get('/hotels/{id}', [HotelController::class, 'show']);
 
 // 7. Menampilkan daftar SEMUA hotel
 Route::get('/hotels', [HotelController::class, 'index']);
+Route::post('/hotels', [HotelController::class, 'store']);       // Pintu buat Create (Method POST)
+Route::put('/hotels/{id}', [HotelController::class, 'update']);   // Pintu buat Update (Method PUT)
+Route::delete('/hotels/{id}', [HotelController::class, 'destroy']); // Pintu buat Delete (Method DELETE)
 
 // --- FITUR BARU: REVIEW & RATING ---
 // Untuk melihat semua ulasan yang masuk

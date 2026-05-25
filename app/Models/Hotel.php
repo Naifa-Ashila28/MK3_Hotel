@@ -6,6 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hotel extends Model
 {
-    // Ini PENTING: Supaya database bisa diisi lewat Postman tanpa error
-    protected $guarded = []; 
+    // 1. Mendaftarkan kolom yang BOLEH diisi lewat Postman (Sisi Admin CRUD)
+    protected $fillable = [
+        'category_id', 
+        'name', 
+        'image', 
+        'price', 
+        'description', 
+        'location', 
+        'rating'
+    ];
+
+    // 2. RELASI: Menyatakan bahwa Hotel "Milik" (belongsTo) sebuah Category
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
 }
