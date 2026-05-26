@@ -11,13 +11,30 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        // 1. Validasi inputan dari Android dulu biar formatnya bener
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
 
+        // 2. Cari usernya di database berdasarkan email
         $user = User::where('email', $request->email)->first();
 
+        // 3. PENGAMAN SAKRAL: Jika user gak ketemu ATAU password-nya salah, langsung tolak!
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Email atau password salah, bree!'
+            ], 401); // 401 artinya Unauthorized (tidak diizinkan)
+        }
+
+        // 4. Kalau lolos seleksi di atas, hapus token lama (biar gak numpuk)
         $user->tokens()->delete();
 
+        // 5. Bikin token baru
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // 6. Lempar respon sukses ke Android Studio
         return response()->json([
             'status' => true,
             'message' => 'Login berhasil',
