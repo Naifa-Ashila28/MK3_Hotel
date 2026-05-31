@@ -82,4 +82,13 @@ class AuthController extends Controller
             'message' => 'Berhasil logout, token telah dihapus.'
         ], 200);
     }
+    public function profile(Request $request)
+    {
+        // Narik data user yang sedang login berdasarkan token Sanctum secara realtime
+        return response()->json([
+            'status' => true,
+            'message' => 'Data profil berhasil diambil',
+            'data' => $request->user() // Otomatis ngirim id, name, email, phone dari MySQL
+        ], 200);
+    }
 }

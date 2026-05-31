@@ -62,3 +62,6 @@ Route::post('/review', [ReviewController::class, 'store']);
 // untuk register
 Route::post('/register', [AuthController::class, 'register']);
 
+// untuk profil
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'profile']);
+
