@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hotel extends Model
 {
-    // 1. Mendaftarkan kolom yang BOLEH diisi lewat Postman (Sisi Admin CRUD)
+    // 1. Tambahkan latitude & longitude ke dalam fillable biar bisa diisi koordinat maps-nya
     protected $fillable = [
         'category_id', 
         'name', 
@@ -14,12 +14,18 @@ class Hotel extends Model
         'price', 
         'description', 
         'location', 
-        'rating'
+        'rating',
+        'latitude',  // <-- WAJIB DITAMBAHIN
+        'longitude'  // <-- WAJIB DITAMBAHIN
     ];
 
-    // 2. RELASI: Menyatakan bahwa Hotel "Milik" (belongsTo) sebuah Category
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class, 'hotel_id', 'id');
     }
 }
