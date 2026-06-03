@@ -3,65 +3,49 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Import controller sesuai folder Api
+// Import semua controller sesuai folder Api
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HotelController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\ReviewController; // <-- TAMBAHAN: Import buat fitur review
+use App\Http\Controllers\Api\ReviewController;
 
-// 1. Membuat pemesanan hotel
-Route::post('/booking', [BookingController::class, 'store']);
-
-// 2. Membatalkan booking berdasarkan ID
-Route::delete('/booking/{id}', [BookingController::class, 'destroy']);
-
-// 3. Login user
+// Fitur Login & Register dasar
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
-// 4. Ambil kategori hotel (Luxury/Budget)
-Route::get('/categories', [HotelController::class, 'categories']);
-
-// 5. Melakukan pembayaran
-Route::post('/payment', [PaymentController::class, 'pay']);
-
-// 6. Menampilkan detail hotel berdasarkan ID
-Route::get('/hotels/{id}', [HotelController::class, 'show']);
-
-// 7. Untuk Lokasi
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/user/location', [UserController::class, 'storeLocation']);
-    // untuk logout
-Route::post('/logout', [AuthController::class, 'logout']);
-});
-
-// 6. Menampilkan detail hotel berdasarkan ID (Spesifik satu hotel)
-Route::get('/hotels/{id}', [HotelController::class, 'show']);
-
-// 7. Menampilkan daftar SEMUA hotel
 Route::get('/hotels', [HotelController::class, 'index']);
-Route::post('/hotels', [HotelController::class, 'store']);  // Pintu buat Create (Method POST)
-Route::put('/hotels/{id}', [HotelController::class, 'update']);   // Pintu buat Update (Method PUT)
-Route::delete('/hotels/{id}', [HotelController::class, 'destroy']); // Pintu buat Delete (Method DELETE)
+Route::get('/hotels/{id}', [HotelController::class, 'show']);
+Route::post('/hotels', [HotelController::class, 'store']);  
+Route::put('/hotels/{id}', [HotelController::class, 'update']);   
+Route::delete('/hotels/{id}', [HotelController::class, 'destroy']); 
 
-// --- ROUTE GROUP UNTUK CATEGORIES ---
+// Fitur Kategori Hotel - Disatukan di sini!
 Route::get('/categories', [HotelController::class, 'categories']);
 Route::post('/categories', [HotelController::class, 'storeCategory']);
 Route::put('/categories/{id}', [HotelController::class, 'updateCategory']);
 Route::delete('/categories/{id}', [HotelController::class, 'destroyCategory']);
 
-
-// --- FITUR BARU: REVIEW & RATING ---
-// Untuk melihat semua ulasan yang masuk
+// Fitur Review & Rating
 Route::get('/review', [ReviewController::class, 'index']); 
-
-// Untuk mengirim ulasan baru dari aplikasi Android
 Route::post('/review', [ReviewController::class, 'store']);
 
-// untuk register
-Route::post('/register', [AuthController::class, 'register']);
+//Aman, harus make sistem login ini
+Route::middleware('auth:sanctum')->group(function () {
+    
+    // Fitur Booking Hotel
+    Route::get('/booking', [BookingController::class, 'index']);   
+    Route::post('/booking', [BookingController::class, 'store']);
+    Route::delete('/booking/{id}', [BookingController::class, 'destroy']);
 
-// untuk profil
-Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'profile']);
+    // ====== PINDAHKAN PAYMENT KE SINI BIAR GEMBOKNYA AMAN ======
+    Route::post('/payment', [PaymentController::class, 'pay']);
 
+    // Fitur Kirim Lokasi GPS HP Android
+    Route::post('/user/location', [UserController::class, 'storeLocation']);
+    
+    // Fitur Ambil Profil & Keluar Aplikasi (Logout)
+    Route::get('/user', [AuthController::class, 'profile']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});

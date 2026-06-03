@@ -10,16 +10,17 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::create('bookings', function (Blueprint $table) {
-        $table->id();
-        $table->string('user_name');
-        $table->string('nama_hotel'); // Ganti hotel_id jadi nama_hotel
-        $table->string('kota');       // Tambahin kolom kota
-        $table->string('durasi');
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
+            $table->string('email');            
+            $table->integer('hotel_id');         
+            $table->string('jenis_kamar');      
+            $table->date('waktu_pemesanan');    
+            $table->string('status')->default('unpaid'); // 
+            $table->timestamps();               
+        });
+    }
 
     /**
      * Reverse the migrations.

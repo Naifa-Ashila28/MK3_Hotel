@@ -1,28 +1,51 @@
 <?php
 
-namespace App\Http\Controllers\Api; // <-- Ini alamat barunya!
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Booking; 
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-   public function store(Request $request)
-{
-    // Pastikan tidak ada lagi kata 'nama_hotel' atau 'kota' di sini
-$simpan = Booking::create([
-    'user_name' => $request->user_name,
-    'hotel_id'  => $request->hotel_id, 
-    'durasi'    => $request->durasi,
-]);
+    public function index()
+    {
+        $user = Auth::user();
 
-    return response()->json([
-    'status' => 'sukses',
-    'pesan'  => 'Booking berhasil dicatat!', 
-    'data'   => $simpan
-    ], 201);
-}
+        if ($user) {
+            $booking = Booking::where('email', $user->email)->get();
+        } else {
+            $booking = Booking::all();
+        }
+
+        return response()->json($booking, 200);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'hotel_id' => 'required',
+            'jenis_kamar' => 'required',
+            'waktu_pemesanan' => 'required'
+        ]);
+
+        $user = Auth::user();
+
+        $simpan = Booking::create([
+            'email'           => $user ? $user->email : ($request->email ?? 'user@stayin.com'),
+            'hotel_id'        => $request->hotel_id, 
+            'jenis_kamar'     => $request->jenis_kamar,
+            'waktu_pemesanan' => $request->waktu_pemesanan,
+            'status'          => 'unpaid',
+        ]);
+
+        return response()->json([
+            'status' => 'sukses',
+            'pesan'  => 'Booking berhasil dicatat!', 
+            'data'   => $simpan 
+        ], 201);
+    }
 
     public function destroy($id)
     {
