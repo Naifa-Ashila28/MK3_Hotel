@@ -35,6 +35,11 @@ class PaymentController extends Controller
             'status' => 'paid' 
         ]);
 
+        $booking = \App\Models\Booking::find($request->booking_id);
+        if ($booking) {
+            $booking->update(['status' => 'paid']);
+        }
+
         // 3. Kembalikan Response Sukses (201 Created) ke aplikasi Android
         return response()->json([
             "status" => true,
