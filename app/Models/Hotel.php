@@ -6,26 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hotel extends Model
 {
-    // 1. Tambahkan latitude & longitude ke dalam fillable biar bisa diisi koordinat maps-nya
+    // Sesuaikan fillable dengan migration terbaru (Hapus price, description, category_id)
     protected $fillable = [
-        'category_id', 
         'name', 
-        'image', 
-        'price', 
-        'description', 
-        'location', 
+        'city',        // Tambah kolom kota
+        'location',    // Ini nama jalan
         'rating',
-        'latitude',  // <-- WAJIB DITAMBAHIN
-        'longitude'  // <-- WAJIB DITAMBAHIN
+        'image', 
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id', 'id');
-    }
-
+    // Hubungkan ke tabel hotel_rooms (Pastikan nama modelnya HotelRoom, beralamat di App\Models\HotelRoom)
     public function rooms()
     {
-        return $this->hasMany(Room::class, 'hotel_id', 'id');
+        return $this->hasMany(HotelRoom::class, 'hotel_id', 'id');
     }
 }

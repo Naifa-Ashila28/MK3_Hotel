@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category; // Memanggil model Category
-use App\Models\Hotel;    // Memanggil model Hotel
+use App\Models\Category; 
+use App\Models\Hotel;    
 
 class HotelController extends Controller
 {
@@ -13,10 +13,11 @@ class HotelController extends Controller
     // 🏢 Bagian 1: CRUD HOTELS (Hotel & Cabang)
     // ==========================================
 
-    // 1. [READ] Fungsi untuk mengambil SEMUA daftar hotel beserta kategorinya
+    // 1. [READ] Mengambil semua hotel sekalian angkut data kamar dan nama kategorinya
     public function index()
     {
-        $data = Hotel::with('category')->get(); 
+        // Menggunakan rooms.category agar data kamar beserta label 'Budget'/'Luxury' ikut terbawa
+        $data = Hotel::with('rooms.category')->get(); 
         return response()->json([
             "status" => true,
             "message" => "List Semua Hotel dari Database",
@@ -24,10 +25,11 @@ class HotelController extends Controller
         ]);
     }
 
-    // 2. [READ] Fungsi untuk detail hotel berdasarkan ID
+    // 2. [READ] JAWABAN UTAMA: Mengambil detail 1 hotel beserta pilihan kamarnya yang dinamis
     public function show($id)
     {
-        $data = Hotel::with('category')->find($id); 
+        // Estafet relasi: Ambil Hotel -> Ambil Kamar-kamarnya -> Ambil Nama Kategori Kamarnya
+        $data = Hotel::with('rooms.category')->find($id); 
         
         if (!$data) {
             return response()->json([
@@ -43,15 +45,13 @@ class HotelController extends Controller
         ]);
     }
 
-    // 3. [CREATE] Fungsi untuk menambah hotel baru (Sisi Admin)
+    // 3. [CREATE] Menambah hotel baru (Sudah disesuaikan dengan kolom city & tanpa deskripsi/harga bawaan)
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'price' => 'required|integer',
-            'description' => 'required|string',
-            'location' => 'required|string',
+            'city' => 'required|string|max:255',       // Kolom penanda kota (Purwokerto, Jakarta, dll)
+            'location' => 'required|string',           // Kolom untuk nama jalan / alamat lengkap
             'rating' => 'required|numeric',
             'image' => 'nullable|string'
         ]);
@@ -65,7 +65,7 @@ class HotelController extends Controller
         ], 201); 
     }
 
-    // 4. [UPDATE] Fungsi untuk mengedit data hotel berdasarkan ID (Sisi Admin)
+    // 4. [UPDATE] Mengedit data hotel berdasarkan ID (Sisi Admin)
     public function update(Request $request, $id)
     {
         $hotel = Hotel::find($id);
@@ -78,11 +78,9 @@ class HotelController extends Controller
         }
 
         $validated = $request->validate([
-            'category_id' => 'nullable|exists:categories,id',
             'name' => 'nullable|string|max:255',
-            'price' => 'nullable|integer',
-            'description' => 'nullable|string',
-            'location' => 'nullable|string',
+            'city' => 'nullable|string|max:255',       // Mengubah kota secara dinamis
+            'location' => 'nullable|string',           // Mengubah nama jalan secara dinamis
             'rating' => 'nullable|numeric',
             'image' => 'nullable|string'
         ]);
@@ -96,7 +94,7 @@ class HotelController extends Controller
         ], 200);
     }
 
-    // 5. [DELETE] Fungsi untuk menghapus data hotel berdasarkan ID (Sisi Admin)
+    // 5. [DELETE] Hapus data hotel berdasarkan ID (Sisi Admin)
     public function destroy($id)
     {
         $hotel = Hotel::find($id);
@@ -121,7 +119,7 @@ class HotelController extends Controller
     // 🗂️ Bagian 2: CRUD CATEGORIES (Kategori Kamar)
     // ==========================================
 
-    // 1. [READ] Fungsi untuk mengambil SEMUA kategori
+    // 1. [READ] Mengambil semua master kategori kamar
     public function categories()
     {
         $data = Category::all(); 
@@ -132,7 +130,7 @@ class HotelController extends Controller
         ]);
     }
 
-    // 2. [CREATE] Fungsi untuk menambah kategori baru (Sisi Admin)
+    // 2. [CREATE] Menambah master kategori baru (Misal: Budget / Luxury)
     public function storeCategory(Request $request)
     {
         $validated = $request->validate([
@@ -148,7 +146,7 @@ class HotelController extends Controller
         ], 201);
     }
 
-    // 3. [UPDATE] Fungsi untuk mengubah nama kategori berdasarkan ID (Sisi Admin)
+    // 3. [UPDATE] Mengubah nama kategori berdasarkan ID
     public function updateCategory(Request $request, $id)
     {
         $category = Category::find($id);
@@ -173,7 +171,7 @@ class HotelController extends Controller
         ], 200);
     }
 
-    // 4. [DELETE] Fungsi untuk menghapus kategori berdasarkan ID (Sisi Admin)
+    // 4. [DELETE] Menghapus kategori berdasarkan ID
     public function destroyCategory($id)
     {
         $category = Category::find($id);
