@@ -17,7 +17,7 @@
             </div>
             <div class="flex-1 overflow-y-auto px-4 py-6 space-y-1">
                 <a href="#" class="flex items-center px-4 py-3 text-white bg-blue-600 rounded-lg font-medium transition">
-                    <i class="fa-solid fa-users mr-3 w-5"></i> Data Lokasi User
+                    <i class="fa-solid fa-users mr-3 w-5"></i> Data User
                 </a>
             </div>
             <div class="p-4 border-t border-slate-800">
