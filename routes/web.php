@@ -17,30 +17,30 @@ Route::post('/admin/login', function (Request $request) {
     $username = $request->input('username');
     $password = $request->input('password');
 
-    // COCOKAN DENGAN AKUN REQUEST LU, CUK!
     if ($username === 'admin' && $password === 'admin123') {
         session(['admin_logged_in' => true]);
         return redirect('/admin/dashboard');
     }
 
-    return redirect('/admin/login')->with('error', 'Username atau Password salah, cuk!');
+    return redirect('/admin/login')->with('Username atau Password salah');
 });
 
-// 3. Halaman Dashboard Admin (DIPROTEKSI SESSION)
+// 3. Halaman Dashboard Admin
 Route::get('/admin/dashboard', function () {
-    // Wajibin login, kalau belum login tendang balik ke halaman login
     if (!session()->has('admin_logged_in')) {
-        return redirect('/admin/login')->with('error', 'Wajib login dulu, bos!');
+        return redirect('/admin/login')->with( 'Wajib login dulu');
     }
 
-    $totalUser = DB::table('users')->count();
-    $dataUser = DB::table('users')->orderBy('created_at', 'desc')->get();
+    try { $dataUser = DB::table('users')->get(); } catch (\Exception $e) { $dataUser = collect(); }
+    try { $dataBooking = DB::table('bookings')->orderBy('created_at', 'desc')->get(); } catch (\Exception $e) { $dataBooking = collect(); }
+    try { $dataPayment = DB::table('payments')->orderBy('created_at', 'desc')->get(); } catch (\Exception $e) { $dataPayment = collect(); }
+    try { $dataReview = DB::table('reviews')->orderBy('created_at', 'desc')->get(); } catch (\Exception $e) { $dataReview = collect(); }
 
-    return view('admin.dashboard', compact('totalUser', 'dataUser'));
+    return view('admin.dashboard', compact('dataUser', 'dataBooking', 'dataPayment', 'dataReview'));
 });
 
 // 4. Proses Logout Admin
 Route::get('/admin/logout', function () {
-    session()->forget('admin_logged_in'); // Hapus tanda login
+    session()->forget('admin_logged_in'); 
     return redirect('/admin/login')->with('error', 'Berhasil keluar dashboard!');
 });
